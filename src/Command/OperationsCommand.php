@@ -28,7 +28,7 @@ class OperationsCommand extends Command
         $this
              ->setDescription('Operación aritmética (add, subtract, multiply, divide) con 2 operadores')
              ->setHelp('Obteniendo los dos operadores y la operación aritmética como argumentos, devuelve el resultado de la operacion por consola
-                        NOTA: para pasar como argumentos números negativos [Console] Stop parsing options after encountering "--" token -> symfony console operations 5 -- -6 add
+                        NOTA: para pasar como argumentos números negativos [Console] Stop parsing options after encountering "--" token -> symfony console operations -- 5 -6 add
                         Esto permite el soporte de argumentos con guiones iniciales (por ejemplo, "-1") sino dá error -> The "-6" option does not exist')
              ->addArgument('operatorA', InputArgument::REQUIRED, '¿ Número 1? ( Formatos numéricos válidos : 1, -3, 1.8, ... )')
              ->addArgument('operatorB', InputArgument::REQUIRED, '¿ Número 2? ( Formatos numéricos válidos : 1, -3, 1.8, ... )')
@@ -36,7 +36,7 @@ class OperationsCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $stopwatch = new Stopwatch();
         $stopwatch->start('execute');
@@ -57,7 +57,7 @@ class OperationsCommand extends Command
                     $calculator = $this->calculatorManager->createCalculator($operation);
                     $result = $calculator->calculate($operatorA, $operatorB);
 
-                    $this->output->writeln(strtoupper($value) . " " . $operatorA . " y " . $operatorB . " dá : " . $result);
+                    $this->output->writeln(strtoupper($value) . " " . $operatorA . " y " . $operatorB . " dá : " . (is_null($result) ? 'La división por cero no está definida': $result));
                     break;
                 }
             }
@@ -67,6 +67,8 @@ class OperationsCommand extends Command
 
         $event = $stopwatch->stop('execute');
         $this->output->writeln("\nTOTAL # ".($event->getDuration() / 1000)."s - ".($event->getMemory() / (1024 * 1024))."MB\n");
+
+        return 0;
     }
 
     private function errorArgumentMessages($operatorA, $operatorB, string $operation)

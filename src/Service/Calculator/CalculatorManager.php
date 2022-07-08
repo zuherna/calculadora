@@ -4,13 +4,6 @@ namespace App\Service\Calculator;
 
 class CalculatorManager
 {
-    private Calculator $calculator;
-
-    public function __construct(Calculator $calculator)
-    {
-        $this->calculator = $calculator;
-    }
-
     public static function getOperations(): array
     {
         return [

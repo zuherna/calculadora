@@ -12,6 +12,9 @@ public function name() : string;
 /**
  * Calculates the result after applying the operation to the operands.
  * For example, AddOperation will return for operands 5 and 6 the value 11 (5 + 6 = 11)
+ *
+ * @param int|float   $operandA
+ * @param int|float   $operandB
  */
 public function calculate($operandA, $operandB);
 }
